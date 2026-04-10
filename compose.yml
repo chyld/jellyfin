@@ -14,7 +14,7 @@ services:
         target: /media0
         read_only: true
       - type: bind
-        source: /mnt/truenas/Media/External/Movies
+        source: /mnt/truenas/Media
         target: /media1
         read_only: true
     restart: 'unless-stopped'
