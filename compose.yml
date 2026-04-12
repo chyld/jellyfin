@@ -63,6 +63,22 @@ services:
       - "7878:7878"
     restart: unless-stopped
 
+  # SONARR
+  # ---------------------------------------------------------------- #
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/sonarr/config:/config
+      - /home/chyld/data/copyparty/files:/files
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+
   # PROWLARR
   # ---------------------------------------------------------------- #
   prowlarr:
