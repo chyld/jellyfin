@@ -2,7 +2,7 @@
 
 docker compose down
 
-cd $HOME/data/jellyfin
-rm -rf cache config
-mkdir  cache config
+rm -rf $HOME/data/{jellyfin,seerr,bazarr,radarr,prowlarr,qbittorrent}
+mkdir -p $HOME/data/{jellyfin,seerr,bazarr,radarr,prowlarr,qbittorrent}/config
+mkdir -p $HOME/data/jellyfin/cache
 

@@ -1,21 +1,116 @@
 services:
+
+  # JELLYFIN
+  # ---------------------------------------------------------------- #
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:latest
     container_name: jellyfin
     user: 1000:1000
-    ports:
-      - 8096:8096/tcp
-      - 7359:7359/udp
+    environment:
+      - TZ=America/Los_Angeles
     volumes:
       - /home/chyld/data/jellyfin/config:/config
       - /home/chyld/data/jellyfin/cache:/cache
-      - type: bind
-        source: /home/chyld/data/copyparty/files/movies
-        target: /media0
-        read_only: true
-      - type: bind
-        source: /mnt/truenas/Media
-        target: /media1
-        read_only: true
-    restart: 'unless-stopped'
+      - /home/chyld/data/copyparty/files:/files
+      - /mnt/truenas/Media:/mediaremote:ro
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+
+  # SEERR
+  # ---------------------------------------------------------------- #
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
+    init: true
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/seerr/config:/app/config
+    ports:
+      - "5055:5055"
+    restart: unless-stopped
+
+  # BAZARR
+  # ---------------------------------------------------------------- #
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/bazarr/config:/config
+      - /home/chyld/data/copyparty/files:/files
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
+
+  # RADARR
+  # ---------------------------------------------------------------- #
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/radarr/config:/config
+      - /home/chyld/data/copyparty/files:/files
+    ports:
+      - "7878:7878"
+    restart: unless-stopped
+
+  # PROWLARR
+  # ---------------------------------------------------------------- #
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/prowlarr/config:/config
+    ports:
+      - "9696:9696"
+    restart: unless-stopped
+
+  # QBITTORRENT
+  # ---------------------------------------------------------------- #
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - WEBUI_PORT=8080
+    volumes:
+      - /home/chyld/data/qbittorrent/config:/config
+      - /home/chyld/data/copyparty/files:/files
+    restart: unless-stopped
+
+  # GLUETUN
+  # ---------------------------------------------------------------- #
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - TZ=America/Los_Angeles
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - SERVER_COUNTRIES=United States
+      - SERVER_CITIES=Los Angeles
+    ports:
+      - 8080:8080
+    restart: unless-stopped
 
