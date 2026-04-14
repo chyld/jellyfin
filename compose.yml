@@ -94,6 +94,17 @@ services:
       - "9696:9696"
     restart: unless-stopped
 
+  # BYPARR
+  # ---------------------------------------------------------------- #
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    environment:
+      - TZ=America/Los_Angeles
+    ports:
+      - "8191:8191"
+    restart: unless-stopped
+
   # QBITTORRENT
   # ---------------------------------------------------------------- #
   qbittorrent:
