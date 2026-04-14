@@ -17,6 +17,30 @@ services:
       - "8096:8096"
     restart: unless-stopped
 
+  # STASH
+  # ---------------------------------------------------------------- #
+  stash:
+    image: stashapp/stash:latest
+    container_name: stash
+    environment:
+      - TZ=America/Los_Angeles
+      - STASH_STASH=/data/
+      - STASH_GENERATED=/generated/
+      - STASH_METADATA=/metadata/
+      - STASH_CACHE=/cache/
+      - STASH_PORT=9999
+    volumes:
+      - /home/chyld/data/stash/config:/root/.stash
+      - /home/chyld/data/stash/metadata:/metadata
+      - /home/chyld/data/stash/generated:/generated
+      - /home/chyld/data/stash/cache:/cache
+      - /home/chyld/data/stash/blobs:/blobs
+      - /etc/localtime:/etc/localtime:ro
+      - /home/chyld/data/copyparty/files/adult:/data
+    ports:
+      - "9999:9999"
+    restart: unless-stopped
+
   # SEERR
   # ---------------------------------------------------------------- #
   seerr:
@@ -77,6 +101,22 @@ services:
       - /home/chyld/data/copyparty/files:/files
     ports:
       - "8989:8989"
+    restart: unless-stopped
+
+  # WHISPARR
+  # ---------------------------------------------------------------- #
+  whisparr:
+    image: ghcr.io/thespad/whisparr:latest
+    container_name: whisparr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/chyld/data/whisparr/config:/config
+      - /home/chyld/data/copyparty/files:/files
+    ports:
+      - "6969:6969"
     restart: unless-stopped
 
   # PROWLARR
