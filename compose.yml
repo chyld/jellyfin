@@ -11,8 +11,6 @@ services:
     volumes:
       - /home/chyld/data/jellyfin/config:/config
       - /home/chyld/data/jellyfin/cache:/cache
-      - /home/chyld/data/copyparty/files:/files
-      - /mnt/truenas/Media:/mediaremote:ro
     ports:
       - "8096:8096"
     restart: unless-stopped
@@ -42,7 +40,6 @@ services:
       - TZ=America/Los_Angeles
     volumes:
       - /home/chyld/data/bazarr/config:/config
-      - /home/chyld/data/copyparty/files:/files
     ports:
       - "6767:6767"
     restart: unless-stopped
@@ -58,7 +55,6 @@ services:
       - TZ=America/Los_Angeles
     volumes:
       - /home/chyld/data/radarr/config:/config
-      - /home/chyld/data/copyparty/files:/files
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -74,7 +70,6 @@ services:
       - TZ=America/Los_Angeles
     volumes:
       - /home/chyld/data/sonarr/config:/config
-      - /home/chyld/data/copyparty/files:/files
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -118,7 +113,6 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - /home/chyld/data/qbittorrent/config:/config
-      - /home/chyld/data/copyparty/files:/files
     restart: unless-stopped
 
   # GLUETUN
@@ -140,4 +134,3 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
-
